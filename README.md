@@ -22,7 +22,6 @@ Desenvolver uma aplicação web completa utilizando:
 Aplicando conceitos de:
 - API REST
 - Arquitetura em camadas
-- Autenticação JWT
 - Modelagem relacional
 - Integração Frontend e Backend
 
@@ -37,7 +36,6 @@ Aplicando conceitos de:
 - Filtrar imóveis
 - Visualizar detalhes do imóvel
 - Favoritar imóvel
-- Enviar proposta
 - Solicitar agendamento de visita
 
 ### 🏢 Corretor
@@ -45,13 +43,12 @@ Aplicando conceitos de:
 - Cadastrar imóvel
 - Editar imóvel
 - Remover imóvel
-- Visualizar propostas recebidas
 - Alterar status do imóvel (Disponível, Reservado, Vendido)
 - Confirmar visitas
 
 ### 🔑 Administrador
 - Gerenciar usuários
-- Visualizar relatórios de vendas
+- Visualizar relatórios
 - Acompanhar métricas gerais do sistema
 
 ---
@@ -64,10 +61,9 @@ Aplicando conceitos de:
 - UC04 – Editar Imóvel
 - UC05 – Listar Imóveis
 - UC06 – Filtrar Imóveis
-- UC07 – Enviar Proposta
-- UC08 – Agendar Visita
-- UC09 – Alterar Status do Imóvel
-- UC10 – Visualizar Relatório de Vendas
+- UC07 – Agendar Visita
+- UC08 – Alterar Status do Imóvel
+- UC09 – Visualizar Relatório
 
 ---
 
@@ -79,10 +75,9 @@ Aplicando conceitos de:
 - RF04 – O sistema deve permitir upload de imagens.
 - RF05 – O cliente deve visualizar imóveis disponíveis.
 - RF06 – O sistema deve permitir filtro por preço, cidade e tipo.
-- RF07 – O cliente deve poder enviar proposta.
-- RF08 – O sistema deve permitir agendamento de visitas.
-- RF09 – O corretor deve poder alterar o status do imóvel.
-- RF10 – O administrador deve visualizar relatórios.
+- RF07 – O sistema deve permitir agendamento de visitas.
+- RF08 – O corretor deve poder alterar o status do imóvel.
+- RF09 – O administrador deve visualizar relatórios.
 
 ---
 
@@ -91,11 +86,10 @@ Aplicando conceitos de:
 - RNF01 – Backend desenvolvido em ASP.NET Core.
 - RNF02 – Frontend desenvolvido em React (SPA).
 - RNF03 – Banco de dados MySQL.
-- RNF04 – Autenticação com JWT.
-- RNF05 – Senhas armazenadas com criptografia.
-- RNF06 – Tempo de resposta inferior a 3 segundos.
-- RNF07 – Interface responsiva.
-- RNF08 – Comunicação via API REST.
+- RNF04 – Senhas armazenadas com criptografia.
+- RNF05 – Tempo de resposta inferior a 3 segundos.
+- RNF06 – Interface responsiva.
+- RNF07 – Comunicação via API REST.
 
 ---
 
@@ -105,13 +99,11 @@ Aplicando conceitos de:
 - C#
 - ASP.NET Core Web API
 - Entity Framework Core
-- JWT Authentication
 
 ### 🔹 Frontend
 - React
-- Axios
 - React Router
-- Biblioteca de gráficos (Chart.js ou Recharts)
+- Biblioteca de gráficos 
 
 ### 🔹 Banco de Dados
 - MySQL
