@@ -1,5 +1,6 @@
 # 🏠 ImobiHub
 Plataforma Web para Gestão e Anúncio de Imóveis
+Link Jira: https://imobihub.atlassian.net/jira/software/projects/DEV/summary?atlOrigin=eyJpIjoiYzgzNGVkYzQ3NWQxNGFhN2EwOWRhZTMzMmNiMzlmMzAiLCJwIjoiaiJ9
 
 ---
 
