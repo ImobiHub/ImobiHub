@@ -1,6 +1,11 @@
 version: '3.9'
 
 services:
+  api:
+    build: ./ImobiHub.API
+    ports:
+      - "5000:80"
+
   mysql:
     image: mysql:8
     container_name: imobihub-mysql
