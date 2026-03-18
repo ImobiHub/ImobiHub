@@ -26,4 +26,4 @@ jobs:
       run: dotnet build --no-restore
 
     - name: Build Docker image
-      run: docker build -t imobihub-api .
+      run: docker build -t ImobiHub.API .
