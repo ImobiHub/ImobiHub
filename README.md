@@ -1,5 +1,5 @@
 # 🏠 ImobiHub
-Plataforma Web para Gestão e Anúncio de Imóveis
+Aplicação Web para Gestão e Anúncio de Imóveis
 
 ---
 
