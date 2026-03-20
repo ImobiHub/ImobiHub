@@ -155,22 +155,6 @@ Aplicando conceitos de:
 
 ---
 
-## 👨‍💻 Organização da Dupla
-
-### Desenvolvedor 1 – Backend
-- Modelagem do banco
-- API REST
-- Autenticação
-- Regras de negócio
-
-### Desenvolvedor 2 – Frontend
-- Telas
-- Componentes
-- Integração com API
-- Dashboard
-
----
-
 ## 🎓 Projeto Acadêmico
 
 Sistema desenvolvido para fins acadêmicos com o objetivo de aplicar conceitos de desenvolvimento full stack utilizando tecnologias modernas.
