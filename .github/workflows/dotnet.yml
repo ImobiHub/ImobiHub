@@ -20,7 +20,7 @@ jobs:
         dotnet-version: '8.0.x'
 
     - name: Restaurar dependências
-      run: dotnet restore ./backend/ImobiHub.sln
+      run: dotnet restore ./backend/ImobiHub.slnx
 
     - name: Build
       run: dotnet build ./backend/ImobiHub.sln --no-restore
