@@ -23,5 +23,5 @@ jobs:
       run: dotnet restore ./backend/ImobiHub.slnx
 
     - name: Build
-      run: dotnet build ./backend/ImobiHub.sln --no-restore
+      run: dotnet build ./backend/ImobiHub.slnx --no-restore
 
