@@ -1,41 +1,53 @@
-var builder = WebApplication.CreateBuilder(args);
+using MySqlConnector;
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+var builder = WebApplication.CreateBuilder(args);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
 app.UseHttpsRedirection();
 
-var summaries = new[]
+// ROTA PRINCIPAL
+app.MapGet("/api/imoveis", async (IConfiguration config) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    var lista = new List<object>();
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+    var connectionString = config.GetConnectionString("DefaultConnection");
+
+    using var conn = new MySqlConnection(connectionString);
+    await conn.OpenAsync();
+
+    var query = @"
+        SELECT 
+            imoveis.id_imovel, 
+            imoveis.fk_corretor, 
+            imoveis.descricao_imovel, 
+            imoveis.localizacao_imovel, 
+            imoveis.valor_imovel, 
+            imoveis.img_imovel, 
+            corretores.nome_corretor 
+        FROM imoveis
+        JOIN corretores 
+            ON imoveis.fk_corretor = corretores.id_corretor;
+    ";
+
+    using var cmd = new MySqlCommand(query, conn);
+    using var reader = await cmd.ExecuteReaderAsync();
+
+    while (await reader.ReadAsync())
+    {
+        lista.Add(new
+        {
+            id = reader["id_imovel"],
+            corretorId = reader["fk_corretor"],
+            descricao = reader["descricao_imovel"],
+            localizacao = reader["localizacao_imovel"],
+            valor = reader["valor_imovel"],
+            imagem = reader["img_imovel"],
+            nomeCorretor = reader["nome_corretor"]
+        });
+    }
+
+    return Results.Ok(lista);
+});
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
