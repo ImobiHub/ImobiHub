@@ -19,7 +19,25 @@ lerna-debug.log*
 .DS_Store
 Thumbs.db
 
+#############################################
+# NODE (FRONTEND + BACKEND)
+#############################################
+
+# Ignora qualquer node_modules
+node_modules/
+
+# Builds
+dist/
+dist-ssr/
+frontend/dist/
+backend/imobihub-front/
+backend/package.json
+backend/package-lock.json
+
+#############################################
 # VSCode (manter configs úteis)
+#############################################
+
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -76,14 +94,8 @@ ipch/
 *.VC.opendb
 
 #############################################
-# FRONTEND (React + Vite + Node)
+# FRONTEND (React + Vite)
 #############################################
-
-# Node modules and build
-frontend/node_modules/
-frontend/dist/
-dist/
-dist-ssr/
 
 # Editor configs
 .idea
