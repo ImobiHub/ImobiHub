@@ -3,7 +3,7 @@
 GET {{ImobiHub.API_HostAddress}}/weatherforecast/
 Accept: application/json
 
-GET {{ImobiHub.API_HostAddress}}/imoveis/
+GET {{ImobiHub.API_HostAddress}}/api/imoveis/
 Accept: application/json
 
 ###
