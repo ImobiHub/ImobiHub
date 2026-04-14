@@ -66,4 +66,41 @@ app.MapGet("/api/imoveis", async (IConfiguration config) =>
     return Results.Ok(lista);
 });
 
+app.MapPost("/api/imoveis", async (IConfiguration config, ImovelInput input) =>
+{
+    var connectionString = config.GetConnectionString("DefaultConnection");
+
+    using var conn = new MySqlConnection(connectionString);
+    await conn.OpenAsync();
+
+    var query = @"
+        INSERT INTO imoveis 
+        (fk_corretor, descricao_imovel, localizacao_imovel, valor_imovel, img_imovel)
+        VALUES 
+        (@fk_corretor, @descricao, @localizacao, @valor, @imagem);
+    ";
+
+    using var cmd = new MySqlCommand(query, conn);
+
+    cmd.Parameters.AddWithValue("@fk_corretor", input.fk_corretor);
+    cmd.Parameters.AddWithValue("@descricao", input.descricao);
+    cmd.Parameters.AddWithValue("@localizacao", input.localizacao);
+    cmd.Parameters.AddWithValue("@valor", input.valor);
+    cmd.Parameters.AddWithValue("@imagem", input.imagem);
+
+    await cmd.ExecuteNonQueryAsync();
+
+    return Results.Ok(new { mensagem = "Imóvel cadastrado com sucesso!" });
+});
+
+
 app.Run();
+
+public class ImovelInput
+{
+    public int fk_corretor { get; set; }
+    public string descricao { get; set; }
+    public string localizacao { get; set; }
+    public decimal valor { get; set; }
+    public string imagem { get; set; }
+}
