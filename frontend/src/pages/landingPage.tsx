@@ -19,7 +19,6 @@ export default function LandingPage() {
   const [buscaCidade, setBuscaCidade] = useState("");
   const [precoMax, setPrecoMax] = useState("");
 
-  // 🔹 BUSCAR DADOS DA API
   useEffect(() => {
     fetch("http://localhost:5079/api/imoveis/")
       .then((res) => {
@@ -31,16 +30,29 @@ export default function LandingPage() {
       .then((data) => {
         console.log("API:", data);
 
-        const formatado = data.map((item: any) => ({
-          id: item.id,
-          titulo: item.descricao,
-          preco: item.valor,
-          cidade: item.localizacao || "",
-          imagem:
-            typeof item.imagem === "string"
-              ? item.imagem
-              : undefined,
-        }));
+        if (!Array.isArray(data)) {
+          console.error("Resposta não é array:", data);
+          setLoading(false);
+          return;
+        }
+
+        const formatado = data.map((item: any) => {
+          const cidadeExtraida =
+            item.localizacao?.split("-").pop()?.trim() || "";
+
+          return {
+            id: item.id,
+            titulo: item.descricao,
+            preco: item.valor,
+            cidade: cidadeExtraida,
+            imagem:
+              typeof item.imagem === "string"
+                ? item.imagem
+                : undefined,
+          };
+        });
+
+        console.log("Formatado:", formatado);
 
         setImoveis(formatado);
         setLoading(false);
@@ -51,7 +63,7 @@ export default function LandingPage() {
       });
   }, []);
 
-  // 🔹 FILTRO (seguro)
+  // 🔹 FILTRO
   const imoveisFiltrados = imoveis.filter((imovel) => {
     const cidade = imovel.cidade || "";
 
@@ -65,6 +77,8 @@ export default function LandingPage() {
 
     return matchCidade && matchPreco;
   });
+
+  console.log("Filtrados:", imoveisFiltrados);
 
   return (
     <div>
@@ -84,12 +98,12 @@ export default function LandingPage() {
         {loading && <p>Carregando imóveis...</p>}
 
         {/* 🔹 SEM RESULTADO */}
-        {!loading && imoveis.length === 0 && (
+        {!loading && imoveisFiltrados.length === 0 && (
           <p>Nenhum imóvel encontrado.</p>
         )}
 
         {/* 🔹 GRID */}
-        {!loading && imoveis.length > 0 && (
+        {!loading && imoveisFiltrados.length > 0 && (
           <div
             style={{
               display: "grid",

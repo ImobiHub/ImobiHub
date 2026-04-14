@@ -2,7 +2,23 @@ using MySqlConnector;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// 🔥 ADICIONE ISSO
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+});
+
 var app = builder.Build();
+
+// 🔥 USE CORS AQUI (ANTES DAS ROTAS)
+app.UseCors("AllowFrontend");
 
 app.UseHttpsRedirection();
 
