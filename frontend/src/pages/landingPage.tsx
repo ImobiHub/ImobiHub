@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar";
-import Filtros from "../components/Filtros";
-import CardImovel from "../components/CardImovel";
+import Filtros from "../components/filtros";
+import CardImovel from "../components/cardImovel";
 import Footer from "../components/Footer";
 
 export default function LandingPage() {
