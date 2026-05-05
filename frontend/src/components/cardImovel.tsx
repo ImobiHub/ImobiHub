@@ -1,4 +1,4 @@
-export default function CardImovel({ imovel }: any) {
+export default function CardImovel({ imovel }: unknown) {
   return (
     <div style={{
       background: "#fff",

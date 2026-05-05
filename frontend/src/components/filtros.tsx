@@ -5,7 +5,7 @@ export default function Filtros({
   setBuscaCidade,
   precoMax,
   setPrecoMax
-}: any) {
+}: unknown) {
 
   const [tipo, setTipo] = useState("");
   const [quartos, setQuartos] = useState("");
