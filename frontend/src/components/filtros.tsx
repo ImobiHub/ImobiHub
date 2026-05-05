@@ -1,11 +1,18 @@
 import { useState } from "react";
 
+interface FiltrosProps {
+  buscaCidade: string;
+  setBuscaCidade: (value: string) => void;
+  precoMax: string;
+  setPrecoMax: (value: string) => void;
+}
+
 export default function Filtros({
   buscaCidade,
   setBuscaCidade,
   precoMax,
   setPrecoMax
-}: unknown) {
+}: FiltrosProps) {
 
   const [tipo, setTipo] = useState("");
   const [quartos, setQuartos] = useState("");
@@ -30,13 +37,11 @@ export default function Filtros({
       boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
     }}>
 
-      {/* Tipo de negociação */}
       <select style={estiloInput}>
         <option>Comprar</option>
         <option>Alugar</option>
       </select>
 
-      {/* Tipo de imóvel */}
       <select
         style={estiloInput}
         value={tipo}
@@ -47,7 +52,6 @@ export default function Filtros({
         <option value="Apartamento">Apartamento</option>
       </select>
 
-      {/* Cidade */}
       <input
         placeholder="Cidade"
         value={buscaCidade}
@@ -55,7 +59,6 @@ export default function Filtros({
         style={estiloInput}
       />
 
-      {/* Preço */}
       <input
         placeholder="Preço máximo"
         value={precoMax}
@@ -63,7 +66,6 @@ export default function Filtros({
         style={estiloInput}
       />
 
-      {/* Quartos */}
       <select
         style={estiloInput}
         value={quartos}
@@ -75,7 +77,6 @@ export default function Filtros({
         <option value="3">3+</option>
       </select>
 
-      {/* Botão */}
       <button style={{
         background: "#f4b400",
         border: "none",
