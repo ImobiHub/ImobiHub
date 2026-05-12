@@ -1,72 +1,99 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Filtros from "../components/Filtros";
 import CardImovel from "../components/CardImovel";
 import Footer from "../components/Footer";
+import { api } from "../services/api";
 
 export default function LandingPage() {
+  const [imoveisOriginal, setImoveisOriginal] = useState<any[]>([]); // Lista vinda do banco
+  const [imoveisExibidos, setImoveisExibidos] = useState<any[]>([]); // Lista após filtro
+  const [loading, setLoading] = useState(true);
 
-  const imoveis = [
-    { id: 1, titulo: "Casa em Joinville", preco: 352900, cidade: "Joinville" },
-    { id: 2, titulo: "Apartamento Centro", preco: 278500, cidade: "Joinville" },
-    { id: 3, titulo: "Sobrado Geminado", preco: 419990, cidade: "Joinville" },
-    { id: 4, titulo: "Casa com Piscina", preco: 602300, cidade: "Joinville" },
-    { id: 5, titulo: "Apartamento Moderno", preco: 312750, cidade: "Joinville" },
-    { id: 6, titulo: "Casa no Bairro América", preco: 489900, cidade: "Joinville" },
-    { id: 7, titulo: "Apartamento Mobiliado", preco: 355800, cidade: "Joinville" },
-    { id: 8, titulo: "Cobertura Duplex", preco: 890000, cidade: "Joinville" },
-    { id: 9, titulo: "Casa Geminada", preco: 265400, cidade: "Joinville" },
-    { id: 10, titulo: "Apartamento Compacto", preco: 198990, cidade: "Joinville" },
-    { id: 11, titulo: "Casa Alto Padrão", preco: 1250000, cidade: "Joinville" },
-    { id: 12, titulo: "Apartamento Vista Mar", preco: 720500, cidade: "Joinville" },
-    { id: 13, titulo: "Sobrado Novo", preco: 530000, cidade: "Joinville" },
-    { id: 14, titulo: "Casa com Jardim", preco: 410200, cidade: "Joinville" },
-    { id: 15, titulo: "Apartamento Econômico", preco: 175000, cidade: "Joinville" },
-  ];
-
-  //  ESTADO DO FILTRO
   const [buscaCidade, setBuscaCidade] = useState("");
   const [precoMax, setPrecoMax] = useState("");
+  const [tipo, setTipo] = useState("");
 
-  //  FILTRO FUNCIONANDO
-  const imoveisFiltrados = imoveis.filter((imovel) => {
-    const matchCidade = imovel.cidade
-      .toLowerCase()
-      .includes(buscaCidade.toLowerCase());
+  useEffect(() => {
+    async function carregarImoveis() {
+      try {
+        setLoading(true);
+        const resposta = await api.get("/imoveis");
+        setImoveisOriginal(resposta.data);
+        setImoveisExibidos(resposta.data); // Inicialmente mostra tudo
+      } catch (erro) {
+        console.error("Erro ao carregar imóveis:", erro);
+      } finally {
+        setLoading(false);
+      }
+    }
+    carregarImoveis();
+  }, []);
 
-    const matchPreco = precoMax
-      ? imovel.preco <= Number(precoMax)
+// Dentro da sua LandingPage, adicione o estado de quartos se ele sumiu:
+const [quartos, setQuartos] = useState("");
+
+// Atualize a função lidarComFiltro:
+const lidarComFiltro = () => {
+  const filtrados = imoveisOriginal.filter((imovel) => {
+    // Filtro de Cidade
+    const matchCidade = imovel.localizacao.toLowerCase().includes(buscaCidade.toLowerCase());
+    
+    // Filtro de Preço
+    const valorLimpo = precoMax.replace(/\./g, '').replace(',', '.');
+    const filtroPreco = parseFloat(valorLimpo);
+    const matchPreco = (!filtroPreco || isNaN(filtroPreco)) ? true : imovel.valor <= filtroPreco;
+
+    // Filtro de Tipo
+    const matchTipo = tipo ? imovel.descricao.toLowerCase().includes(tipo.toLowerCase()) : true;
+
+    // NOVO: Filtro de Quartos (procura o número no texto da descrição)
+    const matchQuartos = quartos 
+      ? imovel.descricao.toLowerCase().includes(`${quartos} quarto`) || 
+        imovel.descricao.toLowerCase().includes(`${quartos} dorm`)
       : true;
 
-    return matchCidade && matchPreco;
+    return matchCidade && matchPreco && matchTipo && matchQuartos;
   });
+
+  setImoveisExibidos(filtrados);
+};
 
   return (
     <div>
       <Navbar />
-
       <Filtros
-        buscaCidade={buscaCidade}
-        setBuscaCidade={setBuscaCidade}
-        precoMax={precoMax}
-        setPrecoMax={setPrecoMax}
+        buscaCidade={buscaCidade} setBuscaCidade={setBuscaCidade}
+        precoMax={precoMax} setPrecoMax={setPrecoMax}
+        tipo={tipo} setTipo={setTipo}
+        onFiltrar={lidarComFiltro} // Passa a função para o botão
       />
 
       <div className="container">
-        <h2>Imóveis disponíveis</h2>
-
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-          gap: 20,
-          marginTop: 20
-        }}>
-          {imoveisFiltrados.map((imovel) => (
-            <CardImovel key={imovel.id} imovel={imovel} />
-          ))}
-        </div>
+        {loading ? (
+          <p>Carregando imóveis...</p>
+        ) : (
+          <>
+            <h2>{imoveisExibidos.length} imóveis encontrados</h2>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+              {imoveisExibidos.map((imovel) => (
+                <CardImovel 
+                  key={imovel.id} 
+                  imovel={{
+                    id: imovel.id,
+                    titulo: imovel.descricao,
+                    cidade: imovel.localizacao,
+                    preco: imovel.valor,
+                    imagem: (imovel.imagem && imovel.imagem !== "NULL") 
+                      ? imovel.imagem 
+                      : "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=500"
+                  }} 
+                />
+              ))}
+            </div>
+          </>
+        )}
       </div>
-
       <Footer />
     </div>
   );
