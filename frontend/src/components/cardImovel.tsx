@@ -9,15 +9,17 @@ export default function CardImovel({ imovel }: any) {
       transition: "0.2s"
     }}>
       <img
-        src={`https://picsum.photos/300/200?random=${imovel.id}`}
-        style={{ width: "100%" }}
-      />
+  src={imovel.imagem}
+  alt={imovel.titulo}
+  style={{ width: "100%", height: "200px", objectFit: "cover" }}
+/>
 
       <div style={{ padding: 15 }}>
-        <h4>{imovel.titulo}</h4>
-        <p style={{ color: "#777" }}>{imovel.cidade}</p>
-
-        <h3>R$ {imovel.preco.toLocaleString()}</h3>
+        <h4 style={{ marginBottom: "5px" }}>{imovel.titulo}</h4>
+        <p style={{ color: "#777", fontSize: "0.9rem" }}>{imovel.cidade}</p>
+        <h3 style={{ color: "#f4b400", marginTop: "10px" }}>
+          {imovel.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+        </h3>
       </div>
     </div>
   );
