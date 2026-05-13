@@ -1,13 +1,15 @@
-import "./styles/global.css"
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { ChakraProvider } from '@chakra-ui/react'
-import App from './App.tsx'
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
+import AppRoutes from './routes/index' // Corrigido aqui: apenas um 'i' no import
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <ChakraProvider>
-      <App />
-    </ChakraProvider>
-  </StrictMode>,
+// Se o seu CSS estiver dando erro 500 também, comente a linha abaixo
+// import './index.css' 
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
+  </React.StrictMode>,
 )
