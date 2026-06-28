@@ -9,10 +9,11 @@ export default function LandingPage() {
   const [imoveisFiltrados, setImoveisFiltrados] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // --- ESTADOS DOS INPUTS (O que o usuário digita) ---
   const [busca, setBusca] = useState("");
   const [tipo, setTipo] = useState("");
   const [quartos, setQuartos] = useState("");
+  const [banheiros, setBanheiros] = useState("");
+  const [vagas, setVagas] = useState("");
   const [maxPreco, setMaxPreco] = useState("");
 
   useEffect(() => {
@@ -20,7 +21,7 @@ export default function LandingPage() {
       try {
         const resposta = await api.get("/imoveis");
         setImoveis(resposta.data);
-        setImoveisFiltrados(resposta.data); // Inicialmente mostra tudo
+        setImoveisFiltrados(resposta.data);
       } catch (erro) {
         console.error("Erro ao carregar imoveis:", erro);
       } finally {
@@ -30,7 +31,6 @@ export default function LandingPage() {
     carregarImoveis();
   }, []);
 
-  // --- FUNÇÃO PARA APLICAR OS FILTROS ---
   const aplicarFiltros = () => {
     const resultado = imoveis.filter((imovel) => {
       const termo = busca.toLowerCase();
@@ -38,153 +38,74 @@ export default function LandingPage() {
                          imovel.localizacao?.toLowerCase().includes(termo);
       
       const matchTipo = tipo ? imovel.tipoNegocio === tipo : true;
-      const matchQuartos = quartos ? imovel.quartos >= Number(quartos) : true;
+      
+      // Filtros exatos conforme solicitado
+      const matchQuartos = quartos ? imovel.quartos === Number(quartos) : true;
+      const matchBanheiros = banheiros ? imovel.banheiros === Number(banheiros) : true;
+      const matchVagas = vagas ? imovel.vagas === Number(vagas) : true;
+      
       const matchPreco = maxPreco ? Number(imovel.valor) <= Number(maxPreco) : true;
-
-      return matchBusca && matchTipo && matchQuartos && matchPreco;
+      
+      return matchBusca && matchTipo && matchQuartos && matchBanheiros && matchVagas && matchPreco;
     });
     setImoveisFiltrados(resultado);
   };
 
-  // --- FUNÇÃO PARA REMOVER TUDO ---
   const limparFiltros = () => {
-    setBusca("");
-    setTipo("");
-    setQuartos("");
-    setMaxPreco("");
-    setImoveisFiltrados(imoveis); // Volta a lista completa
+    setBusca(""); setTipo(""); setQuartos(""); setBanheiros(""); setVagas(""); setMaxPreco("");
+    setImoveisFiltrados(imoveis);
   };
 
-  const filterInputStyle = {
-    padding: "12px 15px",
-    borderRadius: "8px",
-    border: "1px solid #e2e8f0",
-    fontSize: "0.95rem",
-    outline: "none",
-    background: "#fff",
-    color: "#4a5568",
+  const inputStyle = {
+    padding: "10px 0", border: "none", borderBottom: "2px solid #B19F92",
+    background: "transparent", fontSize: "0.9rem", color: "#01103A", outline: "none", width: "100%"
   };
 
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif", background: "#fff", color: "#1a202c", minHeight: "100vh" }}>
+    <div style={{ background: "#F8EDD9", color: "#01103A", minHeight: "100vh", fontFamily: "'Inter', sans-serif" }}>
       <Navbar />
 
-      {/* SEÇÃO HERO */}
-      <section style={{ 
-        padding: "80px 20px", 
-        textAlign: "center", 
-        background: "linear-gradient(to bottom, #f8fafc, #fff)",
-        borderBottom: "1px solid #eee"
-      }}>
-        <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
-          <h1 style={{ fontSize: "3rem", fontWeight: 800, marginBottom: "30px", letterSpacing: "-0.02em" }}>
-            Encontre o seu lugar em Joinville com a ImobiHub.
+      <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "60px 20px" }}>
+        
+        <section style={{ marginBottom: "60px" }}>
+          {/* TÍTULO CHAMATIVO */}
+          <h1 style={{ fontSize: "3.5rem", fontWeight: "300", textAlign: "center", marginBottom: "15px", lineHeight: "1.1" }}>
+            Encontre o seu lugar perfeito com a <span style={{ fontWeight: "700", color: "#01103A" }}>ImobiHub</span>.
           </h1>
+          <p style={{ textAlign: "center", fontSize: "1.2rem", color: "#919FAB", marginBottom: "40px" }}>
+            Conectamos você ao imóvel dos seus sonhos com agilidade e exclusividade.
+          </p>
 
-          {/* PAINEL DE BUSCA */}
-          <div style={{ 
-            background: "#fff", 
-            padding: "25px", 
-            borderRadius: "20px", 
-            boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
-            border: "1px solid #e2e8f0",
-            display: "flex",
-            flexDirection: "column",
-            gap: "15px"
-          }}>
-            <input 
-              type="text" 
-              placeholder="Pesquise por bairro, rua ou tipo de imovel..." 
-              value={busca}
-              onChange={(e) => setBusca(e.target.value)}
-              style={{ ...filterInputStyle, fontSize: "1rem" }}
-            />
-
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "10px" }}>
-              <select value={tipo} onChange={(e) => setTipo(e.target.value)} style={filterInputStyle}>
-                <option value="">Negocio (Todos)</option>
-                <option value="Venda">Comprar</option>
-                <option value="Aluguel">Alugar</option>
-              </select>
-
-              <select value={quartos} onChange={(e) => setQuartos(e.target.value)} style={filterInputStyle}>
-                <option value="">Quartos</option>
-                <option value="1">1+ Quarto</option>
-                <option value="2">2+ Quartos</option>
-                <option value="3">3+ Quartos</option>
-              </select>
-
-              <input 
-                type="number" 
-                placeholder="Preço Máximo" 
-                value={maxPreco}
-                onChange={(e) => setMaxPreco(e.target.value)}
-                style={filterInputStyle}
-              />
-
-              {/* BOTÃO FILTRAR */}
-              <button 
-                onClick={aplicarFiltros}
-                style={{ 
-                  background: "#2b6cb0", 
-                  color: "#fff", 
-                  border: "none", 
-                  borderRadius: "8px", 
-                  fontWeight: "700", 
-                  cursor: "pointer",
-                  padding: "12px"
-                }}
-              >
-                🔍 Filtrar
+          <div style={{ background: "#fff", padding: "30px", borderRadius: "16px", border: "1px solid #e5e5e5", boxShadow: "0 10px 20px rgba(0,0,0,0.03)" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "20px", marginBottom: "20px" }}>
+              <input type="text" placeholder="Bairro ou cidade..." value={busca} onChange={(e) => setBusca(e.target.value)} style={inputStyle} />
+              <select value={tipo} onChange={(e) => setTipo(e.target.value)} style={inputStyle}><option value="">Negócio</option><option value="Venda">Venda</option><option value="Aluguel">Aluguel</option></select>
+              <input type="number" placeholder="Preço Máx." value={maxPreco} onChange={(e) => setMaxPreco(e.target.value)} style={inputStyle} />
+              <input type="number" placeholder="Quartos" value={quartos} onChange={(e) => setQuartos(e.target.value)} style={inputStyle} />
+              <input type="number" placeholder="Banheiros" value={banheiros} onChange={(e) => setBanheiros(e.target.value)} style={inputStyle} />
+              <input type="number" placeholder="Vagas" value={vagas} onChange={(e) => setVagas(e.target.value)} style={inputStyle} />
+            </div>
+            
+            <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}>
+              <button onClick={limparFiltros} style={{ padding: "10px 20px", borderRadius: "8px", border: "1px solid #01103A", background: "transparent", color: "#01103A", fontWeight: "600", cursor: "pointer" }}>
+                Limpar Filtros
               </button>
-
-              {/* BOTÃO REMOVER */}
-              <button 
-                onClick={limparFiltros}
-                style={{ 
-                  background: "#fff", 
-                  color: "#e53e3e", 
-                  border: "1px solid #fed7d7", 
-                  borderRadius: "8px", 
-                  fontWeight: "700", 
-                  cursor: "pointer",
-                  padding: "12px"
-                }}
-              >
-                🗑️ Limpar
+              <button onClick={aplicarFiltros} style={{ padding: "10px 20px", borderRadius: "8px", border: "none", background: "#01103A", color: "#F8EDD9", fontWeight: "600", cursor: "pointer" }}>
+                Buscar Imóveis
               </button>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* LISTAGEM */}
-      <main style={{ maxWidth: "1200px", margin: "0 auto", padding: "60px 20px" }}>
-        <div style={{ marginBottom: "30px" }}>
-          <h2 style={{ fontSize: "1.6rem", fontWeight: "700" }}>Imoveis em Destaque</h2>
-          <p style={{ color: "#718096" }}>Exibindo {imoveisFiltrados.length} propriedades.</p>
-        </div>
+        <h2 style={{ fontSize: "1.2rem", fontWeight: "600", marginBottom: "30px", color: "#919FAB" }}>
+          {imoveisFiltrados.length} propriedades encontradas
+        </h2>
 
-        {loading ? (
-          <div style={{ textAlign: "center", padding: "100px" }}>Carregando...</div>
-        ) : (
-          <div style={{ 
-            display: "grid", 
-            gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", 
-            gap: "35px" 
-          }}>
+        {loading ? <p>Carregando...</p> : (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "30px" }}>
             {imoveisFiltrados.map((imovel) => (
               <CardImovel key={imovel.id} imovel={imovel} />
             ))}
-          </div>
-        )}
-
-        {!loading && imoveisFiltrados.length === 0 && (
-          <div style={{ textAlign: "center", padding: "80px", background: "#f8fafc", borderRadius: "20px" }}>
-            <h3 style={{ color: "#2d3748" }}>Nenhum resultado para esses filtros.</h3>
-            <button onClick={limparFiltros} style={{ color: "#2b6cb0", background: "none", border: "none", textDecoration: "underline", cursor: "pointer", marginTop: "10px" }}>
-              Ver todos os imoveis novamente
-            </button>
           </div>
         )}
       </main>
