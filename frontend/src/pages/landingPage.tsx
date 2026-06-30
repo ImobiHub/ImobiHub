@@ -39,7 +39,6 @@ export default function LandingPage() {
       
       const matchTipo = tipo ? imovel.tipoNegocio === tipo : true;
       
-      // Filtros exatos conforme solicitado
       const matchQuartos = quartos ? imovel.quartos === Number(quartos) : true;
       const matchBanheiros = banheiros ? imovel.banheiros === Number(banheiros) : true;
       const matchVagas = vagas ? imovel.vagas === Number(vagas) : true;
@@ -68,7 +67,7 @@ export default function LandingPage() {
       <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "60px 20px" }}>
         
         <section style={{ marginBottom: "60px" }}>
-          {/* TÍTULO CHAMATIVO */}
+          {}
           <h1 style={{ fontSize: "3.5rem", fontWeight: "300", textAlign: "center", marginBottom: "15px", lineHeight: "1.1" }}>
             Encontre o seu lugar perfeito com a <span style={{ fontWeight: "700", color: "#01103A" }}>ImobiHub</span>.
           </h1>

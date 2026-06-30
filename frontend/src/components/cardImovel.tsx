@@ -3,16 +3,12 @@ import { useNavigate } from "react-router-dom";
 export default function CardImovel({ imovel }: { imovel: any }) {
   const navigate = useNavigate();
 
-  // Se o imovel for nulo, nao renderiza nada para evitar crash
   if (!imovel) return null;
 
-  // BLINDAGEM DO VALOR: 
-  // Tentamos converter para numero, se falhar ou nao existir, usamos 0.
   const valorExibicao = imovel.valor !== undefined && imovel.valor !== null
     ? Number(imovel.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
     : "Sob consulta";
 
-  // FALLBACK DE IMAGEM: 
   // Se nao tiver imagem ou se for o erro do System.Byte, usamos uma foto padrão.
   const imagemValida = imovel.imagem && imovel.imagem !== "System.Byte[]" && imovel.imagem !== ""
     ? imovel.imagem 

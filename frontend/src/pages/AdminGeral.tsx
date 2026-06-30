@@ -105,7 +105,7 @@ export default function AdminGeral() {
   const corretoresStats = Array.from(corretoresMap.entries());
   const totalCorretores = corretoresStats.length;
 
-  // DADOS FICTÍCIOS PARA O GRÁFICO (Último Trimestre)
+  // DADOS PARA O GRÁFICO (Último Trimestre)
   const dadosGrafico = [
     { mes: "Jan", vendas: 45, alugueis: 80 },
     { mes: "Fev", vendas: 60, alugueis: 65 },
@@ -173,7 +173,7 @@ export default function AdminGeral() {
             {/* COLUNA DIREITA: GRÁFICO COM VALORES */}
             <div style={{ ...cardStyle, flex: "1 1 500px", justifyContent: "space-between" }}>
               <div>
-                <span style={cardLabelStyle}>Desempenho Trimestral (Fictício)</span>
+                <span style={cardLabelStyle}>Desempenho Trimestral </span>
                 <div style={{ display: "flex", gap: "15px", marginTop: "5px" }}>
                   <span style={{ fontSize: "12px", color: "#919FAB", display: "flex", alignItems: "center", gap: "5px" }}>
                     <div style={{ width: "10px", height: "10px", backgroundColor: "#01103A", borderRadius: "2px" }}></div> Vendas
@@ -297,9 +297,6 @@ export default function AdminGeral() {
   );
 }
 
-// ==========================================
-// ESTILOS COM A NOVA PALETA
-// ==========================================
 const navLinkStyle = {
   color: "#F8EDD9", textDecoration: "none", fontSize: "15px", fontWeight: "500", transition: "color 0.2s"
 };
